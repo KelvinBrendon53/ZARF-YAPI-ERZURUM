@@ -27,7 +27,7 @@ st.markdown("""
     /* Tablo gövdesi rengi */
     [data-testid="stDataFrame"] {
         background-color: #e0ffff !important;
-        border: 1px solid #384056 !important;
+        border: 1px solid #e0ffff !important;
         border-radius: 10px;
     }
     
