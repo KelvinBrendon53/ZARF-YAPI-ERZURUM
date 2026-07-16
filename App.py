@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Sayfa Ayarları
-st.set_page_config(page_title="ZARF YAPI - MAXX DASHBOARD", layout="wide")
+st.set_page_config(page_title="ERZURUM", layout="wide")
 
 # CSS: YUMUŞAK KOYU MOD VE RENKLİ BAŞLIKLAR
 st.markdown("""
