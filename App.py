@@ -1,48 +1,61 @@
 import streamlit as st
 import pandas as pd
-import time
 
-# Sayfa ayarları (Tarayıcı sekmesinde düzgün görünmesi için)
-st.set_page_config(page_title="Zarf Yapı | Depo", layout="wide")
+# Sayfa Ayarları
+st.set_page_config(page_title="Zarf Yapı Erzurum - Stok", layout="wide")
 
-# Modern Tasarım için CSS (Renkler: Zarf Yapı stili - Lacivert/Gri/Turuncu)
+# CSS ile "MAXX" Tasarım (Turkcell ve Fiber Estetiği)
 st.markdown("""
     <style>
-    .stApp { background-color: #0e1117; }
-    h1 { color: #FFA500; text-align: center; font-family: 'Arial Black'; }
-    .stDataFrame { border: 2px solid #FFA500; border-radius: 10px; }
-    div[data-testid="stMetricValue"] { color: #ffffff; }
+    .stApp { background-color: #f8f9fa; }
+    /* Başlık Bölgesi */
+    .title-box { 
+        background: linear-gradient(90deg, #FFD700 0%, #000080 100%); 
+        padding: 20px; 
+        border-radius: 15px; 
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+    }
+    /* Tablo Çerçevesi */
+    .stDataFrame { border: 2px solid #000080; border-radius: 10px; }
+    /* Buton Tasarımı */
+    div.stButton > button {
+        background-color: #FFD700 !important;
+        color: #000080 !important;
+        font-weight: bold;
+        width: 100%;
+        border-radius: 10px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🏗️ ZARF YAPI - STOK TAKİP")
+# Logo ve Başlık (Turkcell/Fiber Teması)
+col_logo, col_title = st.columns([1, 4])
+with col_logo:
+    # İnternetten şık bir fiber/internet ikonu çekiyoruz
+    st.image("https://cdn-icons-png.flaticon.com/512/3652/3652613.png", width=100)
+with col_title:
+    st.markdown("<div class='title-box'><h1>ZARF YAPI ERZURUM<br>STOK TAKİP</h1></div>", unsafe_allow_html=True)
 
+# Veri İşlemleri
 DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
 GID = "1034042521"
 CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={GID}"
 
-# Veri çekme fonksiyonu
-@st.cache_data(ttl=10) # 10 saniyede bir veriyi taze tutar
+@st.cache_data(ttl=10)
 def load_data():
     df = pd.read_csv(CSV_URL)
     return df.fillna(0)
 
-# Ana ekran düzeni
-col1, col2, col3 = st.columns([1, 6, 1])
+# Gövde
+df = load_data()
+st.dataframe(df, use_container_width=True)
 
-with col2:
-    try:
-        df = load_data()
-        
-        # Mobil uyumlu olması için metinlerin net olması
-        st.dataframe(df, use_container_width=True, height=500)
-        
-        # Küçük bir şık detay: Güncelleme butonu (Manuel kontrol daha karizmatik durur)
-        if st.button("🔄 STOKLARI GÜNCELLE"):
-            st.rerun()
-            
-    except Exception:
-        st.error("⚠️ Sunucuya bağlanamadık. İnternet veya Link Ayarlarını kontrol et reis!")
+# Güncelleme Butonu
+if st.button("🔄 VERİLERİ YENİLE"):
+    st.cache_data.clear()
+    st.rerun()
 
 st.markdown("---")
-st.caption("© 2026 Zarf Yapı İnşaat Ltd. | Teknik Ofis Takip Sistemi")
+st.markdown("🚀 **Zarf Yapı Erzurum - Fiber Optik Stok Yönetimi**")
