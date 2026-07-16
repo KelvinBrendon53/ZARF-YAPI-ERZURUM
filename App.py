@@ -4,15 +4,15 @@ import pandas as pd
 st.title("📦 Zarf Yapı - Depo Stok")
 
 # Dosya ID'niz (Linkteki o uzun kod)
-DOSYA_ID = "1UjCSBo1DmOoaFm7iLtB3CEBJc63Sf7xDDSKYSONhb7I"
+DOSYA_ID = "/1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l/"
 
 # GID değeri: Sayfanın ID'si. 
 # Eğer hata alırsan tarayıcıda "STOK LİSTESİ" sekmesine tıkla, 
 # adres çubuğunun en sonunda #gid= ile başlayan sayı neyse onu buraya yaz.
 # Genelde ilk sayfa 0'dır, ama emin olalım:
-GID = "0" 
+GID = "1" 
 
-CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={GID}"
+CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={1034042521}"
 
 try:
     df = pd.read_csv(CSV_URL)
