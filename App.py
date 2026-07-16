@@ -4,7 +4,7 @@ import pandas as pd
 st.title("📦 Zarf Yapı - Depo Stok")
 
 # Dosya ID'niz (Linkteki o uzun kod)
-DOSYA_ID = "/1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l/"
+DOSYA_ID = "https://docs.google.com/spreadsheets/d/1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l/edit?gid=1034042521#gid=1034042521"
 
 # GID değeri: Sayfanın ID'si. 
 # Eğer hata alırsan tarayıcıda "STOK LİSTESİ" sekmesine tıkla, 
