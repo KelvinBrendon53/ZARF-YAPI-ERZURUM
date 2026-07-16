@@ -5,7 +5,7 @@ st.title("📦 Zarf Yapı - Depo Stok")
 
 # Google Sheets'ten veriyi çekmek için tek ve net link
 # Lütfen şu satırı dosyanın en üstüne aynen kopyala
-CSV_URL = "https://docs.google.com/spreadsheets/d/1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l/edit?gid=1034042521#gid=1034042521"
+CSV_URL = "https://docs.google.com/spreadsheets/d/1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l/edit?gid=1034042521#gid=1034042521" 
 
 try:
     # Veriyi çekiyoruz
