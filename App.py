@@ -34,7 +34,7 @@ st.markdown("""
 col_logo, col_title = st.columns([1, 4])
 with col_logo:
     # İnternetten şık bir fiber/internet ikonu çekiyoruz
-    st.image("https://cdn-icons-png.flaticon.com/512/3652/3652613.png", width=100)
+    st.image("https://ffo3gv1cf3ir.merlincdn.net/SiteAssets/Hakkimizda/genel-bakis/logolarimiz/AMBLEM_SARI.jpg?20260716_03-135355", width=100)
 with col_title:
     st.markdown("<div class='title-box'><h1>ZARF YAPI ERZURUM<br>STOK TAKİP</h1></div>", unsafe_allow_html=True)
 
