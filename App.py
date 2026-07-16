@@ -42,13 +42,13 @@ st.markdown("<div class='header-style'>", unsafe_allow_html=True)
 c1, c2, c3 = st.columns([1, 4, 1])
 
 with c1:
-    
+    # 1. Logo (Fiber İkonu)
     st.image("https://ffo3gv1cf3ir.merlincdn.net/SiteAssets/Hakkimizda/genel-bakis/logolarimiz/AMBLEM_SARI.jpg?20260716_03-135355", width=60)
 with c2:
     st.markdown("<h1>ZARF YAPI ERZURUM<br><small style='color: #FFD700;'>STOK TAKİP</small></h1>", unsafe_allow_html=True)
 with c3:
-  
-    st.image("C:\Users\muham\Downloads\logo.webp", width=60)
+    # 2. Logo (Buraya kendi logonu/ikonunu ekleyebilirsin)
+    st.image("https://zarfyapi.com/assets/logo.png", width=60)
     
 st.markdown("</div>", unsafe_allow_html=True)
 
