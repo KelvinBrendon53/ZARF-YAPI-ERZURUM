@@ -26,7 +26,7 @@ st.markdown("""
     /* TABLE / DATAFRAME STİLİ (JİLET GİBİ OKUMA) */
     /* Tablo gövdesi rengi */
     [data-testid="stDataFrame"] {
-        background-color: #252936 !important;
+        background-color: #e0ffff !important;
         border: 1px solid #384056 !important;
         border-radius: 10px;
     }
