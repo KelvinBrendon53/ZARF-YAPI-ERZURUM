@@ -64,9 +64,9 @@ st.markdown("""
 
 # Başlık ve Logolar
 c1, c2, c3 = st.columns([1, 4, 1])
-with c1: st.image("https://cdn-icons-png.flaticon.com/512/3652/3652613.png", width=70)
+with c1: st.image("https://ffo3gv1cf3ir.merlincdn.net/SiteAssets/Hakkimizda/genel-bakis/logolarimiz/AMBLEM_SARI.jpg?20260716_03-135355", width=85)
 with c2: st.markdown("<h1>ZARF YAPI ERZURUM</h1>", unsafe_allow_html=True)
-with c3: st.image("https://cdn-icons-png.flaticon.com/512/2829/2829562.png", width=70)
+with c3: st.image("https://zarfyapi.com/assets/logo.png", width=85)
 
 # Veri İşlemleri
 DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
