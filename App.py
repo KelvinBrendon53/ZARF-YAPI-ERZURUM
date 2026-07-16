@@ -9,5 +9,8 @@ SHEET_URL = "https://docs.google.com/spreadsheets/d/1Kbzpbu-mxaXZmY52qXVoj0nxF_X
 # Veriyi oku (API anahtarı gerekmez)
 df = pd.read_csv(SHEET_URL.replace("/edit?gid=0#gid=0", "/export?format=csv&gid=0"))
 
-st.write("Mevcut Stok Durumun:")
-st.dataframe(df)
+df = pd.read_csv(csv_url)
+df = df.fillna(0) 
+
+# Tabloyu ekranda göster
+st.dataframe(df, use_container_width=True)
