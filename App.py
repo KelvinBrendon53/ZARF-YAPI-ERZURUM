@@ -15,7 +15,7 @@ st.markdown("""
     
     /* Kart Tasarımları */
     .card { 
-        background-color: #252936; 
+        background-color: #e0ffff; 
         padding: 20px; 
         border-radius: 15px; 
         border-left: 5px solid #FFD700; 
