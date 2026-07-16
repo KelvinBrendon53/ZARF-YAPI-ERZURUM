@@ -102,5 +102,4 @@ if st.button("🔄 VERİLERİ YENİLE"):
     st.cache_data.clear()
     st.rerun()
 
-st.markdown("---")
-st.caption("© 2026 Zarf Yapı Erzurum | Proje Takip Sistemi")
+st.markdown("<p class='yesil-imza'>Kurucu: Muhammed Emin YILMAZ</p>", unsafe_allow_html=True)
