@@ -15,7 +15,7 @@ st.markdown("""
     
     /* Kart Tasarımları */
     .card { 
-        background-color: #e0ffff; 
+        background-color: #252936; 
         padding: 20px; 
         border-radius: 15px; 
         border-left: 5px solid #FFD700; 
@@ -26,8 +26,8 @@ st.markdown("""
     /* TABLE / DATAFRAME STİLİ (JİLET GİBİ OKUMA) */
     /* Tablo gövdesi rengi */
     [data-testid="stDataFrame"] {
-        background-color: #e0ffff !important;
-        border: 1px solid #e0ffff !important;
+        background-color: #384056 !important;
+        border: 1px solid #252936 !important;
         border-radius: 10px;
     }
     
