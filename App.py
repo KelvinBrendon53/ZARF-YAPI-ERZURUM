@@ -1,25 +1,31 @@
 import streamlit as st
 import pandas as pd
+import time
 
 st.title("📦 Zarf Yapı - Depo Stok")
 
-# Senin verdiğin linkteki ID ve GID numarası
 DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
 GID = "1034042521"
-
-# CSV formatına çevrilmiş özel link
 CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={GID}"
 
-try:
-    # Veriyi çek
+# Veriyi çeken fonksiyon
+def veri_cek():
     df = pd.read_csv(CSV_URL)
-    
-    # Sayıların tam gözükmesi ve temizlenmesi için
-    df = df.fillna(0)
-    
-    # Veriyi ekranda göster
-    st.dataframe(df, use_container_width=True)
-    
-except Exception as e:
-    st.error("Veri çekilemedi. Lütfen dosyanın 'Herkese açık' (Görüntüleyici) olduğundan emin ol.")
-    st.write(f"Hata detayı: {e}")
+    return df.fillna(0)
+
+# Sayfaya bir "placeholder" (yer tutucu) koyuyoruz
+placeholder = st.empty()
+
+# Sonsuz döngü (her 5 saniyede bir yeniler)
+while True:
+    try:
+        data = veri_cek()
+        with placeholder.container():
+            st.dataframe(data, use_container_width=True)
+            st.write(f"Son güncelleme: {time.strftime('%H:%M:%S')}")
+        
+        time.sleep(5) # 5 saniye bekle
+        
+    except Exception as e:
+        st.error("Veri çekilemedi. Lütfen bağlantı ayarlarını kontrol edin.")
+        break
