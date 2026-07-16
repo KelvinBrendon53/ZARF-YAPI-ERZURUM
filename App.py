@@ -28,7 +28,10 @@ CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&
 
 @st.cache_data(ttl=10)
 def load_data():
-    return pd.read_csv(CSV_URL).fillna(0)
+    df = pd.read_csv(CSV_URL).fillna(0)
+    # İsimsiz sütunları temizle
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    return df
 
 df = load_data()
 
