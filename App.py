@@ -3,14 +3,19 @@ import pandas as pd
 
 st.title("📦 Zarf Yapı - Depo Stok")
 
-DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
-CSV_URL = f"https://docs.google.com/spreadsheets/d//{DOSYA_ID}/export?format=csv&gid=1034042521"
+# Google Sheets'ten veriyi çekmek için tek ve net link
+# Lütfen şu satırı dosyanın en üstüne aynen kopyala
+CSV_URL = "https://docs.google.com/spreadsheets/d/1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l/edit?gid=1034042521#gid=1034042521"
 
-# Veriyi çek
 try:
+    # Veriyi çekiyoruz
     df = pd.read_csv(CSV_URL)
+    
+    # Sayısal hataları (nan) 0 ile dolduruyoruz
     df = df.fillna(0)
+    
+    # Tabloyu ekranda göster
     st.dataframe(df, use_container_width=True)
+    
 except Exception as e:
-    st.error("Veri çekilirken bir hata oluştu. Lütfen Sheets dosyanızın 'Herkesle Paylaşılabilir' olduğundan emin olun.")
-    st.write(e)
+    st.error("Veri alınamadı. Lütfen dosyanın 'Herkesle Paylaşılabilir' olduğundan emin ol.")
