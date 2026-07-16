@@ -2,30 +2,47 @@ import streamlit as st
 import pandas as pd
 import time
 
-st.title("📦 Zarf Yapı - Depo Stok")
+# Sayfa ayarları (Tarayıcı sekmesinde düzgün görünmesi için)
+st.set_page_config(page_title="Zarf Yapı | Depo", layout="wide")
+
+# Modern Tasarım için CSS (Renkler: Zarf Yapı stili - Lacivert/Gri/Turuncu)
+st.markdown("""
+    <style>
+    .stApp { background-color: #0e1117; }
+    h1 { color: #FFA500; text-align: center; font-family: 'Arial Black'; }
+    .stDataFrame { border: 2px solid #FFA500; border-radius: 10px; }
+    div[data-testid="stMetricValue"] { color: #ffffff; }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("🏗️ ZARF YAPI - STOK TAKİP")
 
 DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
 GID = "1034042521"
 CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={GID}"
 
-# Veriyi çeken fonksiyon
-def veri_cek():
+# Veri çekme fonksiyonu
+@st.cache_data(ttl=10) # 10 saniyede bir veriyi taze tutar
+def load_data():
     df = pd.read_csv(CSV_URL)
     return df.fillna(0)
 
-# Sayfaya bir "placeholder" (yer tutucu) koyuyoruz
-placeholder = st.empty()
+# Ana ekran düzeni
+col1, col2, col3 = st.columns([1, 6, 1])
 
-# Sonsuz döngü (her 5 saniyede bir yeniler)
-while True:
+with col2:
     try:
-        data = veri_cek()
-        with placeholder.container():
-            st.dataframe(data, use_container_width=True)
-            st.write(f"Son güncelleme: {time.strftime('%H:%M:%S')}")
+        df = load_data()
         
-        time.sleep(5) # 5 saniye bekle
+        # Mobil uyumlu olması için metinlerin net olması
+        st.dataframe(df, use_container_width=True, height=500)
         
-    except Exception as e:
-        st.error("Veri çekilemedi. Lütfen bağlantı ayarlarını kontrol edin.")
-        break
+        # Küçük bir şık detay: Güncelleme butonu (Manuel kontrol daha karizmatik durur)
+        if st.button("🔄 STOKLARI GÜNCELLE"):
+            st.rerun()
+            
+    except Exception:
+        st.error("⚠️ Sunucuya bağlanamadık. İnternet veya Link Ayarlarını kontrol et reis!")
+
+st.markdown("---")
+st.caption("© 2026 Zarf Yapı İnşaat Ltd. | Teknik Ofis Takip Sistemi")
