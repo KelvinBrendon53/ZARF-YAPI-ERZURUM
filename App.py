@@ -10,7 +10,7 @@ DOSYA_ID = "https://docs.google.com/spreadsheets/d/1Kbzpbu-mxaXZmY52qXVoj0nxF_X4
 # Eğer hata alırsan tarayıcıda "STOK LİSTESİ" sekmesine tıkla, 
 # adres çubuğunun en sonunda #gid= ile başlayan sayı neyse onu buraya yaz.
 # Genelde ilk sayfa 0'dır, ama emin olalım:
-GID = "1" 
+GID = "2" 
 
 CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={1034042521}"
 
