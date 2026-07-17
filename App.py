@@ -75,15 +75,22 @@ CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&
 
 @st.cache_data(ttl=10)
 def load_data():
-    try:
-        df = pd.read_csv(CSV_URL).fillna(0)
-        # İsimsiz sütunları temizle
-        df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-        return df
-    except Exception:
-        return pd.DataFrame({"Durum": ["Hata! Bağlantı kontrol et."] })
-
-df = load_data()
+    # Veriyi çek
+    df = pd.read_csv(CSV_URL).fillna(0)
+    
+    # İsimsiz sütunları temizle
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    
+    # SAYILARI DÜZELTME OPERASYONU:
+    # 'MEVCUT STOK' ve 'GELEN' sütunlarını bulup nokta işaretini kaldırıp sayıya çeviriyoruz
+    # Eğer sütun isimlerin farklıysa buradaki isimleri Google Sheets'tekiyle birebir aynı yap
+    for col in ['MEVCUT STOK', 'GELEN']:
+        if col in df.columns:
+            # Önce string'e çevir, noktaları sil, sonra tam sayı (integer) yap
+            df[col] = df[col].astype(str).str.replace('.', '', regex=False)
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
+            
+    return df
 
 # TABLO 1: STOK DURUMU
 st.markdown("<div class='card'><h3>📦 MEVCUT STOK DURUMU</h3></div>", unsafe_allow_html=True)
