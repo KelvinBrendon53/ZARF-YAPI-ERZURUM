@@ -79,9 +79,16 @@ def load_data():
     df = pd.read_csv(CSV_URL).fillna(0)
     # İsimsiz sütunları temizle
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    
+    # SAYILARI DÜZELTME (Noktayı sil, sayıya çevir)
+    # "MEVCUT STOK" ve "GELEN" sütunları için:
+    for col in ['MEVCUT STOK', 'GELEN']:
+        if col in df.columns:
+            # Önce string yap, noktayı sil, sonra sayıya çevir
+            df[col] = df[col].astype(str).str.replace('.', '', regex=False)
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
+            
     return df
-
-df = load_data()
 
 # Eğer df boşsa veya sütun yoksa hata verme
 if not df.empty:
