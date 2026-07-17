@@ -73,24 +73,31 @@ DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
 GID = "1034042521"
 CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={GID}"
 
+# Veriyi çek ve temizle (Bunu fonksiyonun içinde yapıyoruz)
 @st.cache_data(ttl=10)
 def load_data():
-    # Veriyi çek
     df = pd.read_csv(CSV_URL).fillna(0)
-    
     # İsimsiz sütunları temizle
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    
-    # SAYILARI DÜZELTME OPERASYONU:
-    # 'MEVCUT STOK' ve 'GELEN' sütunlarını bulup nokta işaretini kaldırıp sayıya çeviriyoruz
-    # Eğer sütun isimlerin farklıysa buradaki isimleri Google Sheets'tekiyle birebir aynı yap
-    for col in ['MEVCUT STOK', 'GELEN']:
-        if col in df.columns:
-            # Önce string'e çevir, noktaları sil, sonra tam sayı (integer) yap
-            df[col] = df[col].astype(str).str.replace('.', '', regex=False)
-            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
-            
     return df
+
+df = load_data()
+
+# Eğer df boşsa veya sütun yoksa hata verme
+if not df.empty:
+    # 1. TABLO: Tüm sütunları dinamik gösterelim
+    # Eğer ilk 4 sütunu mutlaka istiyorsan şöyle yap:
+    st.markdown("<div class='card'><h3>📦 MEVCUT STOK DURUMU</h3></div>", unsafe_allow_html=True)
+    st.dataframe(df.iloc[:, 0:min(4, len(df.columns))], use_container_width=True, height=400)
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # 2. TABLO: Eğer 4'ten fazla sütun varsa göster
+    if len(df.columns) > 4:
+        st.markdown("<div class='card'><h3>📋 TALEP VE SİPARİŞ TAKİBİ</h3></div>", unsafe_allow_html=True)
+        st.dataframe(df.iloc[:, 4:], use_container_width=True, height=400)
+else:
+    st.error("Tabloda veri bulunamadı veya link yanlış!")
 
 # TABLO 1: STOK DURUMU
 st.markdown("<div class='card'><h3>📦 MEVCUT STOK DURUMU</h3></div>", unsafe_allow_html=True)
