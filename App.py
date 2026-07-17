@@ -32,14 +32,14 @@ CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&
 
 @st.cache_data(ttl=10)
 def load_data():
-    df = pd.read_csv(CSV_URL).fillna(0)
+    # Veriyi olduğu gibi çek, sayısal bir işleme (nokta silme vb.) sokma
+    df = pd.read_csv(CSV_URL).fillna("") 
+    
+    # Sadece isimsiz sütunları temizle ki tablo bozulmasın
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
-    # Sayı düzeltme: Noktaları kaldır ve sayıya çevir
-    for col in ['MEVCUT STOK', 'GELEN']:
-        if col in df.columns:
-            df[col] = df[col].astype(str).str.replace('.', '', regex=False)
-            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
+    # HİÇBİR SAYISAL DÖNÜŞÜM YAPMIYORUZ!
+    # Böylece Sheets'te ne görüyorsan (örneğin 5.000) o şekilde kalacak.
     return df
 
 df = load_data()
