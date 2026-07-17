@@ -2,63 +2,20 @@ import streamlit as st
 import pandas as pd
 
 # Sayfa Ayarları
-st.set_page_config(page_title="ERZURUM", layout="wide")
+st.set_page_config(page_title="ZARF YAPI - PRO DASHBOARD", layout="wide")
 
-# CSS: YUMUŞAK KOYU MOD VE RENKLİ BAŞLIKLAR
+# CSS: Karanlık Mod ve Özel İmza Tasarımı
 st.markdown("""
     <style>
-    /* Genel Arka Plan (Daha yumuşak bir koyu ton) */
     .stApp { background-color: #161a27; color: #e0e0e0; }
-    
-    /* Ana Başlıklar */
     h1 { color: #FFD700; text-align: center; font-weight: 800; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+    .card { background-color: #252936; padding: 20px; border-radius: 15px; border-left: 5px solid #FFD700; margin-bottom: 20px; }
+    .yesil-imza { color: #00FF00; font-weight: bold; text-align: center; font-size: 18px; margin-top: 30px; }
     
-    /* Kart Tasarımları */
-    .card { 
-        background-color: #252936; 
-        padding: 20px; 
-        border-radius: 15px; 
-        border-left: 5px solid #FFD700; 
-        margin-bottom: 20px; 
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
+    [data-testid="stDataFrame"] { background-color: #384056 !important; border: 1px solid #252936 !important; border-radius: 10px; }
+    [data-testid="stDataFrame"] div[role="columnheader"] { background-color: #0e1117 !important; color: #FFD700 !important; font-weight: bold !important; }
     
-    /* TABLE / DATAFRAME STİLİ (JİLET GİBİ OKUMA) */
-    /* Tablo gövdesi rengi */
-    [data-testid="stDataFrame"] {
-        background-color: #384056 !important;
-        border: 1px solid #252936 !important;
-        border-radius: 10px;
-    }
-    
-    /* TABLO BAŞLIKLARI (SİYAH ZEMİN, SARI YAZI - SOLUKLUĞA SON) */
-    [data-testid="stDataFrame"] div[role="columnheader"] {
-        background-color: #0e1117 !important; /* Kapkara başlık zemini */
-        color: #FFD700 !important;          /* Parlak sarı yazı */
-        font-weight: bold !important;        /* Kalın */
-        font-size: 14px !important;          /* Telefonda okunur boyutta */
-        border-bottom: 2px solid #384056 !important;
-    }
-    
-    /* Tablo içindeki metinler */
-    [data-testid="stDataFrame"] div[role="gridcell"] {
-        color: #e0e0e0 !important;
-        font-size: 13px !important;
-        border-bottom: 1px solid #384056 !important;
-    }
-    
-    /* Butonlar (Turkcell Stili) */
-    div.stButton > button { 
-        background-color: #FFD700 !important; 
-        color: #000080 !important; 
-        font-weight: bold; 
-        border-radius: 10px; 
-        width: 100%; 
-        border: none;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    div.stButton > button:hover { background-color: #ffe066 !important; }
-    
+    div.stButton > button { background-color: #FFD700 !important; color: #000080 !important; font-weight: bold; border-radius: 10px; width: 100%; border: none; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -73,54 +30,37 @@ DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
 GID = "1034042521"
 CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={GID}"
 
-# Veriyi çek ve temizle (Bunu fonksiyonun içinde yapıyoruz)
 @st.cache_data(ttl=10)
 def load_data():
     df = pd.read_csv(CSV_URL).fillna(0)
-    # İsimsiz sütunları temizle
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
-    # SAYILARI DÜZELTME (Noktayı sil, sayıya çevir)
-    # "MEVCUT STOK" ve "GELEN" sütunları için:
+    # Sayı düzeltme: Noktaları kaldır ve sayıya çevir
     for col in ['MEVCUT STOK', 'GELEN']:
         if col in df.columns:
-            # Önce string yap, noktayı sil, sonra sayıya çevir
             df[col] = df[col].astype(str).str.replace('.', '', regex=False)
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
-            
     return df
 
-# Eğer df boşsa veya sütun yoksa hata verme
+df = load_data()
+
+# Tabloları Tek Bir Blokta Göster
 if not df.empty:
-    # 1. TABLO: Tüm sütunları dinamik gösterelim
-    # Eğer ilk 4 sütunu mutlaka istiyorsan şöyle yap:
     st.markdown("<div class='card'><h3>📦 MEVCUT STOK DURUMU</h3></div>", unsafe_allow_html=True)
-    st.dataframe(df.iloc[:, 0:min(4, len(df.columns))], use_container_width=True, height=400)
+    st.dataframe(df.iloc[:, 0:4], use_container_width=True, height=400)
     
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
     
-    # 2. TABLO: Eğer 4'ten fazla sütun varsa göster
     if len(df.columns) > 4:
         st.markdown("<div class='card'><h3>📋 TALEP VE SİPARİŞ TAKİBİ</h3></div>", unsafe_allow_html=True)
         st.dataframe(df.iloc[:, 4:], use_container_width=True, height=400)
 else:
-    st.error("Tabloda veri bulunamadı veya link yanlış!")
-
-# TABLO 1: STOK DURUMU
-st.markdown("<div class='card'><h3>📦 MEVCUT STOK DURUMU</h3></div>", unsafe_allow_html=True)
-# İlk 4 sütun
-st.dataframe(df.iloc[:, 0:4], use_container_width=True, height=400)
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-
-# TABLO 2: SİPARİŞ TAKİBİ
-st.markdown("<div class='card'><h3>📋 TALEP VE SİPARİŞ TAKİBİ</h3></div>", unsafe_allow_html=True)
-# Kalan sütunlar
-st.dataframe(df.iloc[:, 4:], use_container_width=True, height=400)
+    st.error("Veri yüklenemedi!")
 
 # Güncelleme
 if st.button("🔄 VERİLERİ YENİLE"):
     st.cache_data.clear()
     st.rerun()
 
+# Yeşil İmza
 st.markdown("<p class='yesil-imza'>Kurucu: Muhammed Emin YILMAZ</p>", unsafe_allow_html=True)
