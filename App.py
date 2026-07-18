@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-# Sayfa Ayarları
+
 st.set_page_config(page_title="ZARF YAPI - PRO DASHBOARD", layout="wide")
 
-# CSS: Karanlık Mod ve Özel İmza Tasarımı
 st.markdown("""
     <style>
     .stApp { background-color: #161a27; color: #e0e0e0; }
@@ -19,32 +18,26 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Başlık ve Logolar
 c1, c2, c3 = st.columns([1, 4, 1])
 with c1: st.image("https://ffo3gv1cf3ir.merlincdn.net/SiteAssets/Hakkimizda/genel-bakis/logolarimiz/AMBLEM_SARI.jpg?20260716_03-135355", width=85)
 with c2: st.markdown("<h1>ZARF YAPI ERZURUM</h1>", unsafe_allow_html=True)
 with c3: st.image("https://zarfyapi.com/assets/logo.png", width=85)
 
-# Veri İşlemleri
 DOSYA_ID = "1Kbzpbu-mxaXZmY52qXVoj0nxF_X4tO4l"
 GID = "1034042521"
 CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&gid={GID}"
 
 @st.cache_data(ttl=10)
 def load_data():
-    # Veriyi olduğu gibi çek, sayısal bir işleme (nokta silme vb.) sokma
     df = pd.read_csv(CSV_URL).fillna("") 
     
-    # Sadece isimsiz sütunları temizle ki tablo bozulmasın
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
-    # HİÇBİR SAYISAL DÖNÜŞÜM YAPMIYORUZ!
-    # Böylece Sheets'te ne görüyorsan (örneğin 5.000) o şekilde kalacak.
+    
     return df
 
 df = load_data()
 
-# Tabloları Tek Bir Blokta Göster
 if not df.empty:
     st.markdown("<div class='card'><h3>📦 MEVCUT STOK DURUMU</h3></div>", unsafe_allow_html=True)
     st.dataframe(df.iloc[:, 0:4], use_container_width=True, height=400)
@@ -57,10 +50,8 @@ if not df.empty:
 else:
     st.error("Veri yüklenemedi!")
 
-# Güncelleme
 if st.button("🔄 VERİLERİ YENİLE"):
     st.cache_data.clear()
     st.rerun()
 
-# Yeşil İmza
 st.markdown("<p class='yesil-imza'>Kurucu: Muhammed Emin YILMAZ</p>", unsafe_allow_html=True)
