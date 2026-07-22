@@ -29,13 +29,13 @@ CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&
 
 @st.cache_data(ttl=10)
 def load_data():
-    df = pd.read_csv(CSV_URL).fillna("") 
+    # dtype=str ekleyerek tüm sütunları baştan metin olarak okuyoruz, 
+    # böylece Google Sheets'teki 10.000 formatı asla bozulmuyor.
+    df = pd.read_csv(CSV_URL, dtype=str).fillna("") 
     
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
-    
     return df
-
 df = load_data()
 
 if not df.empty:
