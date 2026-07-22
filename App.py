@@ -32,10 +32,15 @@ def load_data():
     df = pd.read_csv(CSV_URL).fillna("") 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
-    # Hücreleri sayıya çeviriyoruz ki Excel formatı düzgün çalışsın
+    # Binlik ayırıcıyı nokta (.) yapma operasyonu
     for col in df.columns:
         if any(kelime in col for kelime in ['STOK', 'GELEN', 'ÇIKIŞ']):
-            df[col] = pd.to_numeric(df[col].astype(str).str.replace('.', '', regex=False).str.replace(',', '', regex=False), errors='coerce').fillna(0)
+            def format_binlik(val):
+                clean_val = str(val).replace('.', '').replace(',', '').strip()
+                if clean_val.isdigit():
+                    return f"{int(clean_val):,}".replace(',', '.')
+                return val
+            df[col] = df[col].apply(format_binlik)
             
     return df
             
