@@ -29,12 +29,19 @@ CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&
 
 @st.cache_data(ttl=10)
 def load_data():
-    # dtype=str ekleyerek tüm sütunları baştan metin olarak okuyoruz, 
-    # böylece Google Sheets'teki 10.000 formatı asla bozulmuyor.
-    df = pd.read_csv(CSV_URL, dtype=str).fillna("") 
-    
+    df = pd.read_csv(CSV_URL).fillna("") 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
+    # Görseldeki #,##0 formatının Python karşılığı (Binlikleri nokta ile ayırma)
+    for col in df.columns:
+        if any(kelime in col for kelime in ['STOK', 'GELEN', 'ÇIKIŞ']):
+            def format_excel_style(val):
+                temiz = str(val).replace('.', '').replace(',', '').strip()
+                if temiz.isdigit():
+                    return f"{int(temiz):,}".replace(',', '.')
+                return val
+            df[col] = df[col].apply(format_excel_style)
+            
     return df
 df = load_data()
 
