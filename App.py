@@ -29,17 +29,11 @@ CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&
 
 @st.cache_data(ttl=10)
 def load_data():
-    df = pd.read_csv(CSV_URL).fillna("") 
+    # dtype=str ekleyerek Google Sheets'ten veriyi metin olarak çekiyoruz, 
+    # böylece Python hiçbir sayıyı çarpamaz, bozamaz veya değiştiremez.
+    df = pd.read_csv(CSV_URL, dtype=str).fillna("") 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    
-    for col in df.columns:
-        if any(kelime in col for kelime in ['STOK', 'GELEN', 'ÇIKIŞ']):
-            def format_excel_style(val):
-                temiz = str(val).replace('.', '').replace(',', '').strip()
-                if temiz.isdigit():
-                    return f"{int(temiz):,}".replace(',', '.')
-                return val
-            df[col] = df[col].apply(format_excel_style)
+    return df
             
     return df
             
