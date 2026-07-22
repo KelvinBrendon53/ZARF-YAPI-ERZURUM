@@ -39,11 +39,6 @@ def load_data():
             
     return df
             
-    return df
-            
-    return df
-            
-    return df
 df = load_data()
 
 if not df.empty:
