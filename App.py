@@ -43,13 +43,13 @@ df = load_data()
 
 if not df.empty:
     st.markdown("<div class='card'><h3>📦 MEVCUT STOK DURUMU</h3></div>", unsafe_allow_html=True)
-    st.dataframe(df.iloc[:, 0:4], use_container_width=True, height=400, hide_index=True)
+    st.dataframe(df.iloc[:, 0:4], use_container_width=True, height=400)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
     if len(df.columns) > 4:
         st.markdown("<div class='card'><h3>📋 TALEP VE SİPARİŞ TAKİBİ</h3></div>", unsafe_allow_html=True)
-        st.dataframe(df.iloc[:, 4:], use_container_width=True, height=400, hide_index=True)
+        st.dataframe(df.iloc[:, 4:], use_container_width=True, height=400)
 else:
     st.error("Veri yüklenemedi!")
 
