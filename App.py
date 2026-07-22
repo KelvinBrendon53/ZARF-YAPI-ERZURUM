@@ -32,15 +32,17 @@ def load_data():
     df = pd.read_csv(CSV_URL).fillna("") 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
-    # Görseldeki #,##0 formatının Python karşılığı (Binlikleri nokta ile ayırma)
     for col in df.columns:
         if any(kelime in col for kelime in ['STOK', 'GELEN', 'ÇIKIŞ']):
             def format_excel_style(val):
                 temiz = str(val).replace('.', '').replace(',', '').strip()
-                if temiz.isdigit():
+
+                if temiz.isdigit() and len(temiz) > 3:  
                     return f"{int(temiz):,}".replace(',', '.')
                 return val
             df[col] = df[col].apply(format_excel_style)
+            
+    return df
             
     return df
 df = load_data()
