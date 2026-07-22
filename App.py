@@ -29,12 +29,14 @@ CSV_URL = f"https://docs.google.com/spreadsheets/d/{DOSYA_ID}/export?format=csv&
 
 @st.cache_data(ttl=10)
 def load_data():
-    # dtype=str ekleyerek Google Sheets'ten veriyi metin olarak çekiyoruz, 
-    # böylece Python hiçbir sayıyı çarpamaz, bozamaz veya değiştiremez.
     df = pd.read_csv(CSV_URL, dtype=str).fillna("") 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    return df
-            
+    
+    # Tamamen boş olan satırları (NaN veya boş string olanları) temizliyoruz
+    df = df.replace(r'^\s*$', float('NaN'), regex=True)
+    df = df.dropna(how='all')
+    df = df.fillna("")
+    
     return df
             
 df = load_data()
