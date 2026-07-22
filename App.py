@@ -32,18 +32,12 @@ def load_data():
     df = pd.read_csv(CSV_URL).fillna("") 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
+    # Hücreleri sayıya çeviriyoruz ki Excel formatı düzgün çalışsın
     for col in df.columns:
         if any(kelime in col for kelime in ['STOK', 'GELEN', 'ÇIKIŞ']):
-            def format_excel_style(val):
-                # Boşlukları temizle
-                temiz = str(val).replace('.', '').replace(',', '').strip()
-                if temiz.isdigit():
-                    # Sayıyı tam sayıya çevir
-                    sayi = int(temiz)
-                    # Python'un binlik ayıracını kullanıp virgülü nokta ile değiştiriyoruz
-                    return f"{sayi:,}".replace(',', '.')
-                return val
-            df[col] = df[col].apply(format_excel_style)
+            df[col] = pd.to_numeric(df[col].astype(str).str.replace('.', '', regex=False).str.replace(',', '', regex=False), errors='coerce').fillna(0)
+            
+    return df
             
     return df
             
