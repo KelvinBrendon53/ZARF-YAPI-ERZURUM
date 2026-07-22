@@ -32,15 +32,14 @@ def load_data():
     df = pd.read_csv(CSV_URL).fillna("") 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
-    # Binlik ayırıcıyı nokta (.) yapma operasyonu
     for col in df.columns:
         if any(kelime in col for kelime in ['STOK', 'GELEN', 'ÇIKIŞ']):
-            def format_binlik(val):
-                clean_val = str(val).replace('.', '').replace(',', '').strip()
-                if clean_val.isdigit():
-                    return f"{int(clean_val):,}".replace(',', '.')
+            def format_excel_style(val):
+                temiz = str(val).replace('.', '').replace(',', '').strip()
+                if temiz.isdigit():
+                    return f"{int(temiz):,}".replace(',', '.')
                 return val
-            df[col] = df[col].apply(format_binlik)
+            df[col] = df[col].apply(format_excel_style)
             
     return df
             
