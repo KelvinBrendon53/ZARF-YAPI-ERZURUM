@@ -35,12 +35,17 @@ def load_data():
     for col in df.columns:
         if any(kelime in col for kelime in ['STOK', 'GELEN', 'ÇIKIŞ']):
             def format_excel_style(val):
+                # Boşlukları temizle
                 temiz = str(val).replace('.', '').replace(',', '').strip()
-
-                if temiz.isdigit() and len(temiz) > 3:  
-                    return f"{int(temiz):,}".replace(',', '.')
+                if temiz.isdigit():
+                    # Sayıyı tam sayıya çevir
+                    sayi = int(temiz)
+                    # Python'un binlik ayıracını kullanıp virgülü nokta ile değiştiriyoruz
+                    return f"{sayi:,}".replace(',', '.')
                 return val
             df[col] = df[col].apply(format_excel_style)
+            
+    return df
             
     return df
             
